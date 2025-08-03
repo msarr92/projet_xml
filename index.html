@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<title>Bibliothèque - Vue XML</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 2em; }
+  h1, h2 { color: #2c3e50; }
+  table { border-collapse: collapse; width: 100%; margin-bottom: 2em; }
+  th, td { border: 1px solid #ddd; padding: 8px; }
+  th { background-color: #3498db; color: white; }
+  tr:nth-child(even) { background-color: #f2f2f2; }
+</style>
+</head>
+<body>
+
+<h1>Bibliothèque - Liste des Livres</h1>
+<div id="livres"></div>
+
+<h1>Liste des Utilisateurs</h1>
+<div id="utilisateurs"></div>
+
+<h1>Liste des Prêts</h1>
+<div id="prets"></div>
+
+<script>
+async function chargerXML() {
+  const response = await fetch('bibliotheque.xml');
+  const xml = await response.text();
+  const parser = new DOMParser();
+  const xmlDoc = parser.parseFromString(xml, "application/xml");
+
+  // Afficher Livres
+  let livresHTML = "<table><thead><tr><th>ID</th><th>Titre</th><th>Auteur</th><th>Genre</th><th>Année</th></tr></thead><tbody>";
+  xmlDoc.querySelectorAll("livre").forEach(livre => {
+    livresHTML += `<tr>
+      <td>${livre.getAttribute("id")}</td>
+      <td>${livre.querySelector("titre")?.textContent || ""}</td>
+      <td>${livre.querySelector("auteur")?.textContent || ""}</td>
+      <td>${livre.querySelector("genre")?.textContent || ""}</td>
+      <td>${livre.querySelector("annee")?.textContent || ""}</td>
+    </tr>`;
+  });
+  livresHTML += "</tbody></table>";
+  document.getElementById("livres").innerHTML = livresHTML;
+
+  // Afficher Utilisateurs
+  let usersHTML = "<table><thead><tr><th>ID</th><th>Prénom</th><th>Nom</th></tr></thead><tbody>";
+  xmlDoc.querySelectorAll("utilisateur").forEach(user => {
+    usersHTML += `<tr>
+      <td>${user.getAttribute("id")}</td>
+      <td>${user.querySelector("prenom")?.textContent || ""}</td>
+      <td>${user.querySelector("nom")?.textContent || ""}</td>
+    </tr>`;
+  });
+  usersHTML += "</tbody></table>";
+  document.getElementById("utilisateurs").innerHTML = usersHTML;
+
+  // Afficher Prêts
+  let pretsHTML = "<table><thead><tr><th>Livre</th><th>Utilisateur</th><th>Date Prêt</th><th>Date Retour</th></tr></thead><tbody>";
+  xmlDoc.querySelectorAll("pret").forEach(pret => {
+    const livreId = pret.querySelector("id_livre")?.textContent;
+    const userId = pret.querySelector("id_utilisateur")?.textContent;
+    const datePret = pret.querySelector("date_pret")?.textContent;
+    const dateRetour = pret.querySelector("date_retour")?.textContent;
+
+    const livre = Array.from(xmlDoc.querySelectorAll("livre")).find(l => l.getAttribute("id") === livreId);
+    const user = Array.from(xmlDoc.querySelectorAll("utilisateur")).find(u => u.getAttribute("id") === userId);
+
+    const titreLivre = livre?.querySelector("titre")?.textContent || livreId;
+
+    const prenom = user?.querySelector("prenom")?.textContent || "";
+    const nom = user?.querySelector("nom")?.textContent || "";
+    const nomUser = (prenom || nom) ? `${prenom} ${nom}`.trim() : userId;
+
+    pretsHTML += `<tr>
+      <td>${titreLivre}</td>
+      <td>${nomUser}</td>
+      <td>${datePret}</td>
+      <td>${dateRetour}</td>
+    </tr>`;
+  });
+  pretsHTML += "</tbody></table>";
+  document.getElementById("prets").innerHTML = pretsHTML;
+}
+
+window.onload = chargerXML;
+</script>
+
+</body>
+</html>

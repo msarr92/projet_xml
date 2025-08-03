@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='utf-8'?>
+<bibliotheque>
+  <livres>
+    <livre id="L1">
+      <titre>L'Étranger</titre>
+      <auteur>Albert Camus</auteur>
+      <genre>Roman</genre>
+      <annee>1942</annee>
+    </livre>
+    <livre id="L2">
+      <titre>1984</titre>
+      <auteur>George Orwell</auteur>
+      <genre>Science-Fiction</genre>
+      <annee>1949</annee>
+    </livre>
+  <livre id="L4"><titre>one piece</titre><auteur>oda</auteur><genre>manga</genre><annee>1998</annee></livre><livre id="l1"><titre>fjfhfh</titre><auteur>fkfkf</auteur><genre>fjfj</genre><annee>2000</annee></livre></livres>
+
+  <utilisateurs>
+    <utilisateur id="U1">
+      <nom>Jean Dupont</nom>
+      <email>jean@example.com</email>
+    </utilisateur>
+    <utilisateur id="U2">
+      <nom>Alice Martin</nom>
+      <email>alice@example.com</email>
+    </utilisateur>
+  <utilisateur id="U4">
+    <nom>momo</nom>
+    <prenom>sarr</prenom>
+  </utilisateur>
+</utilisateurs>
+
+  <prets>
+    <pret id="P1">
+      <id_utilisateur>U1</id_utilisateur>
+      <id_livre>L1</id_livre>
+      <date_pret>2025-06-20</date_pret>
+      <date_retour>2025-07-05</date_retour>
+    </pret>
+    <pret id="P2">
+      <id_utilisateur>U2</id_utilisateur>
+      <id_livre>L2</id_livre>
+      <date_pret>2025-07-15</date_pret>
+      <date_retour />
+    </pret>
+
+<pret id="p1"><id_livre>L4</id_livre><id_utilisateur>U4</id_utilisateur><date_pret>2025-07-26</date_pret><date_retour>2025-07-26</date_retour></pret></prets>
+</bibliotheque>
