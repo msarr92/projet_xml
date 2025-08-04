@@ -125,6 +125,6 @@ Validation XSD	Vérifier que le fichier XML respecte un schéma
 Interface Web enrichie	Ajouter formulaires HTML pour ajouter/modifier les données
 Sauvegarde JSON	Ajouter export/import JSON
 Recherche avancée	Intégrer XQuery/XPath pour filtrage multi-critères
-Statistiques	Afficher stats : livres les plus empruntés, utilisateurs actifs
+Statistiques	Afficher stats : livres les plus empruntés, utilisateurs actifs.
 
 
