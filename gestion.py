@@ -22,10 +22,10 @@ def ajouter_livre():
     ET.SubElement(livre, "genre").text = genre
     ET.SubElement(livre, "annee").text = annee
     sauvegarder()
-    print(f"✅ Livre '{titre}' ajouté.")
+    print(f" Livre '{titre}' ajouté.")
 
 def lister_livres():
-    print("\n📚 Liste des livres :")
+    print("\n Liste des livres :")
     for livre in root.findall("./livres/livre"):
         print(f"- {livre.attrib['id']}: {livre.find('titre').text} ({livre.find('auteur').text})")
 
@@ -36,9 +36,9 @@ def supprimer_livre():
         if livre.attrib["id"] == id:
             livres.remove(livre)
             sauvegarder()
-            print("✅ Livre supprimé.")
+            print(" Livre supprimé.")
             return
-    print("❌ Livre non trouvé.")
+    print(" Livre non trouvé.")
 
 def modifier_livre():
     id = input("ID du livre à modifier : ")
@@ -49,15 +49,15 @@ def modifier_livre():
         livre.find("genre").text = input("Nouveau genre : ")
         livre.find("annee").text = input("Nouvelle année : ")
         sauvegarder()
-        print("✅ Livre modifié.")
+        print(" Livre modifié.")
     else:
-        print("❌ Livre non trouvé.")
+        print(" Livre non trouvé.")
 
 ### UTILISATEURS ###
 def ajouter_utilisateur():
     id = input("ID utilisateur : ")
     if root.find(f"./utilisateurs/utilisateur[@id='{id}']") is not None:
-        print("❌ Un utilisateur avec cet ID existe déjà.")
+        print(" Un utilisateur avec cet ID existe déjà.")
         return
     nom = input("Nom : ")
     prenom = input("Prénom : ")
@@ -67,10 +67,10 @@ def ajouter_utilisateur():
     ET.SubElement(utilisateur, "nom").text = nom
     ET.SubElement(utilisateur, "prenom").text = prenom
     sauvegarder()
-    print(f"✅ Utilisateur '{prenom} {nom}' ajouté.")
+    print(f" Utilisateur '{prenom} {nom}' ajouté.")
 
 def lister_utilisateurs():
-    print("\n👤 Liste des utilisateurs :")
+    print("\n Liste des utilisateurs :")
     for utilisateur in root.findall("./utilisateurs/utilisateur"):
         id_utilisateur = utilisateur.attrib.get('id', '??')
         prenom_elt = utilisateur.find('prenom')
@@ -88,9 +88,9 @@ def supprimer_utilisateur():
         if utilisateur.attrib["id"] == id:
             utilisateurs.remove(utilisateur)
             sauvegarder()
-            print("✅ Utilisateur supprimé.")
+            print(" Utilisateur supprimé.")
             return
-    print("❌ Utilisateur non trouvé.")
+    print(" Utilisateur non trouvé.")
 
 def modifier_utilisateur():
     id = input("ID utilisateur à modifier : ")
@@ -99,9 +99,9 @@ def modifier_utilisateur():
         utilisateur.find("nom").text = input("Nouveau nom : ")
         utilisateur.find("prenom").text = input("Nouveau prénom : ")
         sauvegarder()
-        print("✅ Utilisateur modifié.")
+        print(" Utilisateur modifié.")
     else:
-        print("❌ Utilisateur non trouvé.")
+        print(" Utilisateur non trouvé.")
 
 ### PRETS ###
 
@@ -122,17 +122,17 @@ def ajouter_pret():
 
     # Vérifier que le livre existe
     if root.find(f"./livres/livre[@id='{id_livre}']") is None:
-        print("❌ Livre introuvable.")
+        print(" Livre introuvable.")
         return
     # Vérifier que l'utilisateur existe
     if root.find(f"./utilisateurs/utilisateur[@id='{id_utilisateur}']") is None:
-        print("❌ Utilisateur introuvable.")
+        print(" Utilisateur introuvable.")
         return
     # Vérifier si le livre est déjà prêté et non retourné
     prets = root.findall(f"./prets/pret[id_livre='{id_livre}']")
     prets_actifs = [pret for pret in prets if pret.find('date_retour') is None or not pret.find('date_retour').text or pret.find('date_retour').text.strip() == '']
     if prets_actifs:
-        print("❌ Ce livre est déjà prêté et non retourné.")
+        print(" Ce livre est déjà prêté et non retourné.")
         return
 
     id_pret = generer_id_pret()
@@ -144,14 +144,14 @@ def ajouter_pret():
     ET.SubElement(pret, "date_pret").text = date_pret
     ET.SubElement(pret, "date_retour").text = ""  # vide au début
     sauvegarder()
-    print(f"✅ Prêt enregistré avec ID : {id_pret}.")
+    print(f"Prêt enregistré avec ID : {id_pret}.")
 
 
 def lister_prets():
     tree = ET.parse("bibliotheque.xml")
     root = tree.getroot()
 
-    print("\n📚 Liste détaillée des prêts :")
+    print("\n Liste détaillée des prêts :")
 
     for pret in root.findall("./prets/pret"):
         id_pret = pret.attrib.get("id", "(ID manquant)")
@@ -173,7 +173,7 @@ def lister_prets():
 
         print(f"- Prêt {id_pret} | Livre : {titre_livre} | Utilisateur : {nom_user} | Date Prêt : {date_pret} | Date Retour : {date_retour or 'non retourné'}")
 
-    print("\n📦 Statut des prêts :")
+    print("\n Statut des prêts :")
     for pret in root.findall("./prets/pret"):
         id_pret = pret.attrib.get("id", "(ID manquant)")
         id_livre = pret.find("id_livre").text
@@ -192,7 +192,7 @@ def lister_prets():
         else:
             nom_user = f"(ID: {id_user})"
 
-        etat = "✅ retourné" if date_retour and date_retour.strip() else "📌 en prêt"
+        etat = "retourné" if date_retour and date_retour.strip() else " en prêt"
         print(f"- [{id_pret}] {titre_livre} prêté à {nom_user} le {date_pret} [{etat}]")
 
 
@@ -221,10 +221,10 @@ def retourner_livre():
                 ET.SubElement(pret, "date_retour").text = date_retour
 
             tree.write("bibliotheque.xml", encoding="utf-8", xml_declaration=True)
-            print("✅ Date de retour mise à jour.")
+            print(" Date de retour mise à jour.")
             return
 
-    print("❌ Prêt non trouvé.")
+    print(" Prêt non trouvé.")
 
 
 
@@ -236,9 +236,54 @@ def supprimer_pret():
         if pret.find("id_livre").text == id_livre and pret.find("id_utilisateur").text == id_user:
             prets.remove(pret)
             sauvegarder()
-            print("✅ Prêt supprimé.")
+            print(" Prêt supprimé.")
             return
-    print("❌ Prêt non trouvé.")
+    print(" Prêt non trouvé.")
+
+# Systeme de recherche ####################
+def rechercher_livres_par_auteur():
+    auteur = input("Nom de l'auteur : ")
+    livres = [livre for livre in root.findall("./livres/livre") if livre.find("auteur") is not None and livre.find("auteur").text == auteur]
+    if livres:
+        print(f"\nLivres de {auteur} :")
+        for livre in livres:
+            print(f"- {livre.attrib['id']}: {livre.find('titre').text} ({livre.find('annee').text})")
+    else:
+        print("Aucun livre trouvé pour cet auteur.")
+
+def rechercher_livres_par_genre():
+    genre = input("Genre : ")
+    livres = [livre for livre in root.findall("./livres/livre") if livre.find("genre") is not None and livre.find("genre").text == genre]
+    if livres:
+        print(f"\nLivres du genre {genre} :")
+        for livre in livres:
+            print(f"- {livre.attrib['id']}: {livre.find('titre').text} ({livre.find('auteur').text})")
+    else:
+        print("Aucun livre trouvé pour ce genre.")
+
+def rechercher_livres_par_titre():
+    titre = input("Titre du livre : ")
+    livres = [livre for livre in root.findall("./livres/livre") if livre.find("titre") is not None and livre.find("titre").text == titre]
+    if livres:
+        print(f"\nLivres intitulés '{titre}' :")
+        for livre in livres:
+            print(f"- {livre.attrib['id']}: {livre.find('auteur').text} ({livre.find('annee').text})")
+    else:
+        print("Aucun livre trouvé avec ce titre.")
+
+def rechercher_prets_apres_date():
+    date_limite = input("Afficher les prêts après la date (YYYY-MM-DD) : ")
+    prets = [pret for pret in root.findall("./prets/pret") if pret.find("date_pret") is not None and pret.find("date_pret").text > date_limite]
+    if prets:
+        print(f"\nPrêts après {date_limite} :")
+        for pret in prets:
+            id_livre = pret.find("id_livre").text if pret.find("id_livre") is not None else "?"
+            id_user = pret.find("id_utilisateur").text if pret.find("id_utilisateur") is not None else "?"
+            date_pret = pret.find("date_pret").text if pret.find("date_pret") is not None else "?"
+            print(f"- Livre {id_livre} prêté à utilisateur {id_user} le {date_pret}")
+    else:
+        print("Aucun prêt trouvé après cette date.")
+
 
 ### SAUVEGARDE ###
 def sauvegarder():
@@ -247,7 +292,7 @@ def sauvegarder():
 ### MENUS ###
 def menu():
     while True:
-        print("\n📚 MENU PRINCIPAL")
+        print("\n MENU PRINCIPAL")
         print("1. Gérer les livres")
         print("2. Gérer les utilisateurs")
         print("3. Gérer les prêts")
@@ -263,15 +308,18 @@ def menu():
         elif choix == "0":
             break
         else:
-            print("❌ Choix invalide")
+            print(" Choix invalide")
 
 def menu_livres():
     while True:
-        print("\n📘 GESTION DES LIVRES")
+        print("\n GESTION DES LIVRES")
         print("1. Ajouter un livre")
         print("2. Lister les livres")
         print("3. Modifier un livre")
         print("4. Supprimer un livre")
+        print("5. Rechercher par auteur")
+        print("6. Rechercher par genre")
+        print("7. Rechercher par titre")
         print("0. Retour")
         choix = input("Choix : ")
 
@@ -283,12 +331,18 @@ def menu_livres():
             modifier_livre()
         elif choix == "4":
             supprimer_livre()
+        elif choix == "5":
+            rechercher_livres_par_auteur()
+        elif choix == "6":
+            rechercher_livres_par_genre()
+        elif choix == "7":
+            rechercher_livres_par_titre()
         elif choix == "0":
             break
 
 def menu_utilisateurs():
     while True:
-        print("\n👥 GESTION DES UTILISATEURS")
+        print("\n GESTION DES UTILISATEURS")
         print("1. Ajouter un utilisateur")
         print("2. Lister les utilisateurs")
         print("3. Modifier un utilisateur")
@@ -309,7 +363,7 @@ def menu_utilisateurs():
 
 def menu_prets():
     while True:
-        print("\n📦 GESTION DES PRÊTS")
+        print("\n GESTION DES PRÊTS")
         print("1. Ajouter un prêt")
         print("2. Lister les prêts")
         print("3. Retourner un livre (mise à jour date retour)")
